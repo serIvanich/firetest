@@ -5,13 +5,13 @@ import { Login } from "./Login";
 import { Main } from "./Main";
 import { PrivatPage } from "./PrivatPage";
 
-export const AppRouter: React.FC<AppRouterPropsType> = ({onLogin, setPrivat}) => {
+export const AppRouter: React.FC<AppRouterPropsType> = ({onLogin, setOnLogin}) => {
 
   return (
     <Routes>
        <Route path='/' element={<Main  onLogin={onLogin}/>} />
        <Route path={PRIVAT_PAGE_ROUTE} element={<PrivatPage />}/>
-       <Route path={LOGIN_ROUTE} element={<Login setPrivat={setPrivat}/>} />
+       <Route path={LOGIN_ROUTE} element={<Login setOnLogin={setOnLogin}/>} />
        
     </Routes>
   ) 
@@ -19,5 +19,5 @@ export const AppRouter: React.FC<AppRouterPropsType> = ({onLogin, setPrivat}) =>
 
 type AppRouterPropsType = {
   onLogin: boolean
-  setPrivat: (privat: boolean) => void
+  setOnLogin: (privat: boolean) => void
 }

@@ -1,17 +1,31 @@
 import { AppBar, Button, Grid, Toolbar } from "@material-ui/core";
-
-
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { LOGIN_ROUTE } from "../utils/consts";
+import { signOut } from 'firebase/auth';
+import { useUserAuth } from "..";
 
-export const Navbar: React.FC<NavbarPropsType> = ({onLogin}) => {
+
+
+
+export const Navbar: React.FC<NavbarPropsType> = ({onLogin, setOnLogin}) => {
+  const {auth} = useUserAuth()
+  const logout = () => {
+    signOut(auth)
+    .then(() => {
   
+        setOnLogin(false)
+       
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+  }
   return (
     <AppBar position="static">
   <Toolbar>
     <Grid>
-        {onLogin ?  <Button color="inherit" >logout</Button>
+        {onLogin ?  <Button color="inherit" onClick={logout} >logout</Button>
               :  
                 <NavLink to={LOGIN_ROUTE}
                          style={{textDecoration:'none', backgroundColor: 'lightblue'}}> 
@@ -27,4 +41,5 @@ export const Navbar: React.FC<NavbarPropsType> = ({onLogin}) => {
 
 type NavbarPropsType = {
   onLogin: boolean
+  setOnLogin: (onLogin: boolean) => void
 }

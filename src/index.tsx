@@ -28,7 +28,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-export const Context = createContext(null) as any
+export const Context = createContext<any>(null)
 
 root.render(
   <React.StrictMode>
@@ -39,6 +39,10 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+export function useUserAuth() {
+  return useContext(Context);
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

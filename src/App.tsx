@@ -9,8 +9,8 @@ function App() {
 
   return (
     <div className={s.App}>
-       <Navbar onLogin={onLogin}/>
-       <AppRouter onLogin={onLogin} setPrivat={setOnLogin}/>
+       <Navbar onLogin={onLogin} setOnLogin={setOnLogin}/>
+       <AppRouter onLogin={onLogin} setOnLogin={setOnLogin}/>
     </div>
   );
 }

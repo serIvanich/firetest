@@ -1,12 +1,12 @@
 import { Box, Button, Container, Grid } from "@material-ui/core";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Context } from "..";
+import { useUserAuth } from "..";
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
-export const Login: React.FC<LoginPropsType> = ({setPrivat}) => {
+export const Login: React.FC<LoginPropsType> = ({setOnLogin}) => {
   const navigate = useNavigate()
-  const {auth} = useContext(Context)
+  const {auth} = useUserAuth()
  
 
   const handleGoogleSignIn = async (e: any) => {
@@ -21,7 +21,7 @@ export const Login: React.FC<LoginPropsType> = ({setPrivat}) => {
                 // The signed-in user info.
                 const user = result.user;
                 console.log('login', user)
-               setPrivat(true)
+                setOnLogin(true)
                navigate('/')
                 // redux action? --> dispatch({ type: SET_USER, user });
             })
@@ -72,5 +72,5 @@ export const Login: React.FC<LoginPropsType> = ({setPrivat}) => {
 }
 
 type LoginPropsType = {
-  setPrivat: (privat: boolean) => void
+  setOnLogin: (onLogin: boolean) => void
 }
