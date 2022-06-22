@@ -5,13 +5,13 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { LOGIN_ROUTE } from "../utils/consts";
 
-export const Navbar: React.FC = () => {
-  const user = false
+export const Navbar: React.FC<NavbarPropsType> = ({onLogin}) => {
+  
   return (
     <AppBar position="static">
   <Toolbar>
     <Grid>
-        {user ?  <Button color="inherit" >Enter</Button>
+        {onLogin ?  <Button color="inherit" >logout</Button>
               :  
                 <NavLink to={LOGIN_ROUTE}
                          style={{textDecoration:'none', backgroundColor: 'lightblue'}}> 
@@ -23,4 +23,8 @@ export const Navbar: React.FC = () => {
   </Toolbar>
 </AppBar>
   )
+}
+
+type NavbarPropsType = {
+  onLogin: boolean
 }

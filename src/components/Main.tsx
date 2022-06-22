@@ -1,20 +1,29 @@
-import { Container, Grid } from "@material-ui/core";
+import { Button, Container, Grid } from "@material-ui/core";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { PRIVAT_PAGE_ROUTE } from "../utils/consts";
 
-export const Main: React.FC = () => {
+export const Main: React.FC<MainPropsType> = ({onLogin}) => {
+  const navigate = useNavigate()
+  const enterForPrivat = () => {
+    onLogin ? navigate(PRIVAT_PAGE_ROUTE)
+          : navigate('/login')
+  }
 
   return (
     <Container>
       <Grid container
             justifyContent={'center'}
       >
-          <NavLink to={PRIVAT_PAGE_ROUTE}>
+          <Button onClick={enterForPrivat}>
             ONLY FOR REGISTER USER 
-          </NavLink>
+          </Button>
 
       </Grid>
     </Container>
   )
+}
+
+type MainPropsType =  {
+  onLogin: boolean
 }
