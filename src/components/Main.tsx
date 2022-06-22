@@ -11,9 +11,11 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
   }
 
   return (
-    <Container>
+    <Container  style={{marginTop: '0.5vh', height: '92vh',  backgroundColor: '#cfe8fc' }}>
       <Grid container
             justifyContent={'center'}
+            alignItems={'center'}
+            style={{height: '100%'}}
       >
           <Button onClick={enterForPrivat}>
             ONLY FOR REGISTER USER 
