@@ -3,13 +3,13 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { LOGIN_ROUTE } from "../utils/consts";
 import { signOut } from 'firebase/auth';
-import { useUserAuth } from "..";
+import { useUserContext } from "..";
 
 
 
 
 export const Navbar: React.FC<NavbarPropsType> = ({onLogin, setOnLogin}) => {
-  const {auth} = useUserAuth()
+  const {auth} = useUserContext()
   const logout = () => {
     signOut(auth)
     .then(() => {

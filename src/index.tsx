@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from 'firebase/firestore';
 
 
 //TODO: Replace the following with your app's Firebase project configuration
@@ -20,9 +21,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
+const db = getFirestore(app);
 const auth = getAuth(app);
-console.log(app, auth)
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -33,14 +34,14 @@ export const Context = createContext<any>(null)
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Context.Provider value={{app, auth}}>
+      <Context.Provider value={{app, auth, db}}>
         <App />
       </Context.Provider>
     </BrowserRouter>
   </React.StrictMode>
 );
 
-export function useUserAuth() {
+export function useUserContext() {
   return useContext(Context);
 }
 

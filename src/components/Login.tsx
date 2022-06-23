@@ -1,12 +1,12 @@
 import { Box, Button, Container, Grid } from "@material-ui/core";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserAuth } from "..";
+import { useUserContext } from "..";
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 export const Login: React.FC<LoginPropsType> = ({setOnLogin}) => {
   const navigate = useNavigate()
-  const {auth} = useUserAuth()
+  const {auth} = useUserContext()
  
 
   const handleGoogleSignIn = async (e: any) => {
@@ -15,15 +15,12 @@ export const Login: React.FC<LoginPropsType> = ({setOnLogin}) => {
     provider.setCustomParameters({ prompt: 'select_account' });
         signInWithPopup(auth, provider)
             .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                // const credential = GoogleAuthProvider.credentialFromResult(result);
-                // const token = credential?.accessToken;
-                // The signed-in user info.
+                
                 const user = result.user;
-                console.log('login', user)
+               
                 setOnLogin(true)
-               navigate('/')
-                // redux action? --> dispatch({ type: SET_USER, user });
+                navigate('/')
+               
             })
             .catch((error) => {
                 // Handle Errors here.
