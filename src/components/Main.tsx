@@ -5,6 +5,10 @@ import { PRIVAT_PAGE_ROUTE } from "../utils/consts";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useUserContext } from "..";
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import ClearIcon from '@material-ui/icons/Clear';
+import { doc, deleteDoc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 
 
 export const Main: React.FC<MainPropsType> = ({onLogin}) => {
@@ -51,54 +55,81 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
   
 
   return (
-    <Container  style={{marginTop: '0.5vh', height: '92vh',  backgroundColor: '#cfe8fc' }}>
+    <Container  style={{marginTop: '0.5vh', minHeight: '92vh',  backgroundColor: '#cfe8fc' }}>
       <Grid container
             direction={'column'}
             justifyContent={'center'}
             alignItems={'center'}
             style={{height: '100%'}}
       >
-        <Grid item >
-          <MessagesColumn messages={messages} />
+        <Grid item style={{width: '100%'}}>
+          <MessagesColumn messages={messages} getMessages={getMessages}/>
         </Grid>
+       
         <Grid item >
-          
-        </Grid>
-        
           <Button onClick={enterForPrivat}>
             ONLY FOR REGISTER USER 
           </Button>
-
+        </Grid>
       </Grid>
     </Container>
   )
 }
 
-const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages}) => {
-
+const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessages}) => {
+  const {auth, db} = useUserContext()
+  const [user] = useAuthState(auth)
+  console.log(user)
+  const deleteMessage = async(id: string) => {
+    
+    await deleteDoc(doc(db, 'messages', id));
+    getMessages()
+   
+  }
  if (messages.length === 0){
   return <div> no messages </div>
  }
   return (
-    <Container>
+    <Container style={{display: 'flex', flexDirection: 'column'}}>
       { 
          messages.map((message) => {
-
+          const userPrivat = user && user.displayName === message.userName
+          const justify = userPrivat?'flex-end':'flex-start'
           return <Grid container 
                     key={message.id}
+                    alignItems= {justify}
                     direction={'column'}
-                    style={{width: 200, margin: 10,
-                       border: 'solid 1px blue', borderRadius: 3}}
+                    
                   >
-                    <Grid item
-                      style={{backgroundColor: 'gray', color: 'white', padding: 5,}}
+                    < Grid container 
+                      direction={'column'}
+                      style={{width: 200, margin: 10,
+                              border: 'solid 1px blue', borderRadius: 3,
+                     
+                      }}
                     >
-                      {message.userName}
+                    <Grid container
+                          xs={12}
+                          justifyContent={'space-between'}
+                          style={{minHeight: 40, backgroundColor: 'gray',
+                            color: 'white', padding: 5,}}
+                    >
+                      <Grid item >
+                        {message.userName}
+                      </Grid>
+                      <Grid item >
+                       
+                         { userPrivat && <ClearIcon style={{cursor: 'pointer', color: 'darkred'}}
+                                    onClick={()=> deleteMessage(message.id)}/>
+                    }
+                      </Grid>
+                      
                     </Grid>
-                    <Grid item
-                      style={{ padding: 5,}}
+                    <Grid item xs={12}
+                      style={{minHeight: 60, padding: 5, backgroundColor: 'white'}}
                     >
                       {message.text}
+                    </Grid>
                     </Grid>
                   </Grid>
         })
@@ -109,6 +140,7 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages}) => {
 
 type MessagesColumnPropsType = {
   messages: MessageType[]
+  getMessages: () => void
 }
 type MainPropsType =  {
   onLogin: boolean
