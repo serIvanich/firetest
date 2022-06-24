@@ -38,7 +38,7 @@ export const Login: React.FC<LoginPropsType> = ({setOnLogin}) => {
   return (
     <Container>
       <Grid container
-      style={{height: window.innerHeight - 50}}
+        style={{height: window.innerHeight - 50}}
         alignContent={'center'}
         justifyContent={'space-around'}
       >

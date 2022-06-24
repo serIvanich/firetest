@@ -19,5 +19,5 @@ export const AppRouter: React.FC<AppRouterPropsType> = ({onLogin, setOnLogin}) =
 
 type AppRouterPropsType = {
   onLogin: boolean
-  setOnLogin: (privat: boolean) => void
+  setOnLogin: (onLogin: boolean) => void
 }

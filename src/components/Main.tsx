@@ -4,7 +4,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { PRIVAT_PAGE_ROUTE } from "../utils/consts";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useUserContext } from "..";
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import ClearIcon from '@material-ui/icons/Clear';
 import { doc, deleteDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -14,16 +13,10 @@ import { useAuthState } from "react-firebase-hooks/auth";
 export const Main: React.FC<MainPropsType> = ({onLogin}) => {
   const [messages, setMessages] = useState<MessageType[]>([])
   const navigate = useNavigate()
-  const {db} = useUserContext()
-  const [values, loading, error, snapshot] = useCollectionData();
-  // const myMessages = []
-  // const otherMessages = []
-  // if(messages.length > 0) {
-  //   messages.array.forEach(message => {
-      
-  //   });
-  // }
-
+  const {auth, db} = useUserContext()
+  const [user] = useAuthState(auth)
+  
+  
   useEffect (() => {
     getMessages()
   }, [])
@@ -49,7 +42,7 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
   
   }
   const enterForPrivat = () => {
-    onLogin ? navigate(PRIVAT_PAGE_ROUTE)
+    user ? navigate(PRIVAT_PAGE_ROUTE)
             : navigate('/login')
   }
   
@@ -66,7 +59,9 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
           <MessagesColumn messages={messages} getMessages={getMessages}/>
         </Grid>
        
-        <Grid item >
+        <Grid item 
+              style={{border: 'solid 1px lightblue', borderRadius: 3,}}
+        >
           <Button onClick={enterForPrivat}>
             ONLY FOR REGISTER USER 
           </Button>
@@ -79,7 +74,7 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
 const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessages}) => {
   const {auth, db} = useUserContext()
   const [user] = useAuthState(auth)
-  console.log(user)
+  
   const deleteMessage = async(id: string) => {
     
     await deleteDoc(doc(db, 'messages', id));
@@ -109,7 +104,7 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessage
                       }}
                     >
                     <Grid container
-                          xs={12}
+                          item xs={12}
                           justifyContent={'space-between'}
                           style={{minHeight: 40, backgroundColor: 'gray',
                             color: 'white', padding: 5,}}
@@ -129,6 +124,7 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessage
                       style={{minHeight: 60, padding: 5, backgroundColor: 'white'}}
                     >
                       {message.text}
+
                     </Grid>
                     </Grid>
                   </Grid>
