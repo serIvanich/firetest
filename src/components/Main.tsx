@@ -28,7 +28,10 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
     const querySnapshot = await getDocs(q);
    
     querySnapshot.forEach((doc) => {
-      const { user, text , timestamp} = doc.data()
+      
+      let { user, text , timestamp} = doc.data()
+      timestamp = timestamp.toDate()
+      timestamp = timestamp.toLocaleTimeString()
       const dataMessage = {
         id: doc.id,
         userName: user,
@@ -120,10 +123,22 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessage
                       </Grid>
                       
                     </Grid>
-                    <Grid item xs={12}
-                      style={{minHeight: 60, padding: 5, backgroundColor: 'white'}}
+                    <Grid container 
+                          item xs={12}
+                          direction={'column'}
+                          justifyContent={'space-evenly'}
+                          style={{position: 'relative', minHeight: 60,
+                                  padding: '5px 5px 15px 5px', backgroundColor: 'white'}}
                     >
-                      {message.text}
+                      <Grid item>{message.text}</Grid>
+                      <Grid item
+                            style={{position: 'absolute', right: 0, bottom: 0,
+                                    padding:5, fontSize: '0.7em',
+                                  }}
+                      >
+                        {message.timestamp}
+                      </Grid>
+                      
 
                     </Grid>
                     </Grid>
