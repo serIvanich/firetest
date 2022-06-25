@@ -11,13 +11,13 @@ import { getFirestore } from 'firebase/firestore';
 
 //TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCG9Xy34YAZNatV7NWGF5zs10nIdzy2jZI",
-  authDomain: "firetest-eb312.firebaseapp.com",
-  projectId: "firetest-eb312",
-  storageBucket: "firetest-eb312.appspot.com",
-  messagingSenderId: "241217009764",
-  appId: "1:241217009764:web:6e5af11112ced70c464771",
-  measurementId: "G-VDFBJSWPBR"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
