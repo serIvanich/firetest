@@ -1,7 +1,7 @@
 import { Button, Container, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { PRIVAT_PAGE_ROUTE } from "../utils/consts";
+import { PRIVAT_PAGE_ROUTE,  LOGIN_ROUTE } from "../utils/consts";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { useUserContext } from "..";
 import ClearIcon from '@material-ui/icons/Clear';
@@ -28,8 +28,7 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
     const querySnapshot = await getDocs(q);
    
     querySnapshot.forEach((doc) => {
-      
-      let { user, text , timestamp} = doc.data()
+      let { user, text , timestamp} = doc.data({ serverTimestamps: 'estimate' })
       timestamp = timestamp.toDate()
       timestamp = timestamp.toLocaleTimeString()
       const dataMessage = {
@@ -46,7 +45,7 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
   }
   const enterForPrivat = () => {
     user ? navigate(PRIVAT_PAGE_ROUTE)
-            : navigate('/login')
+            : navigate(LOGIN_ROUTE)
   }
   
 

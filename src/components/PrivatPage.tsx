@@ -26,7 +26,9 @@ export const PrivatPage: React.FC<PrivatPagePropsType> = () => {
     navigate('/')
   }
   const addMessage = () => {
-    
+    if(!text) {
+      return
+    }
     addMessageDB()
     goToMain()
   }
@@ -34,10 +36,11 @@ export const PrivatPage: React.FC<PrivatPagePropsType> = () => {
  
 
   const addMessageDB =  async () => {
+   
     const newDoc = {
       user: userName,
       text: text,
-      timestamp: serverTimestamp(),
+      timestamp:  serverTimestamp(),
     }
     const docInf = await addDoc(collection(db, 'messages'), newDoc);
     try{
