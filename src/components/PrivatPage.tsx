@@ -10,7 +10,7 @@ export const PrivatPage: React.FC<PrivatPagePropsType> = () => {
   const [text, setText] = useState('')
   const {auth,db} = useUserContext()
   const [user] = useAuthState(auth)
-console.log(auth, user)
+
   let userName = 'noName'
   if (user && user.displayName) {
     userName =  user.displayName
