@@ -90,7 +90,7 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessage
     <Container style={{display: 'flex', flexDirection: 'column'}}>
       { 
          messages.map((message) => {
-          const userPrivat = user && user.displayName === message.userName
+          const userPrivat = user && (user.displayName === message.userName || user.email ===  message.userName)
           const justify = userPrivat?'flex-end':'flex-start'
           return <Grid container 
                     key={message.id}

@@ -10,11 +10,15 @@ function App() {
   const {auth, db} = useUserContext()
   const [user] = useAuthState(auth)
   const [values, loading, error, snapshot] = useCollectionData();
-  const [userName, setUserName] = useState<string | null>('no login')
+  const [userName, setUserName] = useState<string | null>(null)
   const [onLogin, setOnLogin] = useState<boolean>(false)
   useEffect(() => {
     if(user) {
-      setUserName(user.displayName)
+      if (user.displayName===null){
+        setUserName(user.email)
+      }else{
+        setUserName(user.displayName)
+      }
       setOnLogin(true)
     }
   },[user])

@@ -11,9 +11,14 @@ export const PrivatPage: React.FC<PrivatPagePropsType> = () => {
   const {auth,db} = useUserContext()
   const [user] = useAuthState(auth)
 
-  let userName = 'noName'
-  if (user && user.displayName) {
-    userName =  user.displayName
+  let userName = null as string | null
+  if (user && (user.displayName || user.email)) {
+    if (user.displayName) {
+      userName =  user.displayName
+    }else{
+      userName = user.email
+    }
+
   }
   
   const navigate = useNavigate()

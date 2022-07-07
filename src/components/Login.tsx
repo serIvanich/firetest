@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "..";
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useFormik } from "formik";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { MAIN_ROUTE, REGISTER_ROUTE } from "../utils/consts";
+import { Link } from "react-router-dom";
 
 export const Login: React.FC<LoginPropsType> = ({setOnLogin}) => {
   const [loginWithPassword, setLoginWithPassport] = useState(false)
@@ -36,6 +39,19 @@ export const Login: React.FC<LoginPropsType> = ({setOnLogin}) => {
   };
 
   const handleEmailPasswordSignIn = async (value: any) => {
+    const auth = getAuth()
+    const {email, password} = value
+    await signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+    // Signed in 
+    console.log(userCredential)
+    const user = userCredential.user;
+    navigate(MAIN_ROUTE)
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
    
   }
 
@@ -101,7 +117,6 @@ const LoginForm: React.FC<LoginFormPropsType> = ({setLoginWithPassport, handleEm
     initialValues: {
       email: '',
       password: '',
-      rememberMe: false
   },
   validate: (values) => {
       const errors: FormikErrorType = {};
@@ -119,13 +134,13 @@ const LoginForm: React.FC<LoginFormPropsType> = ({setLoginWithPassport, handleEm
   },
     onSubmit: values => {
        console.log(values)
-      //  handleEmailPasswordSignIn(values)
+      handleEmailPasswordSignIn(values)
     },
   })
   return (
     <Grid container 
           style={{width:350, minHeight: 350,
-                  padding: 10, background: 'lightgray'}}
+                  padding: '10px 50px', background: 'lightgray'}}
           direction={'column'}
           alignItems={'center'}
           justifyContent={'space-between'}>
@@ -133,14 +148,13 @@ const LoginForm: React.FC<LoginFormPropsType> = ({setLoginWithPassport, handleEm
             <form onSubmit={formik.handleSubmit}>
                 <FormControl>
                     <FormLabel>
-                        <p>To log in get registered
-                            <a href={''}
-                               target={'_blank'}>here
-                            </a>
+                        <p>for log in enter :</p>
+                        <p>Email: your register email</p>
+                        <p>Password: your password</p>
+
+                        <p>if you have not registered click
+                            <Link to={REGISTER_ROUTE}> here </Link>
                         </p>
-                        <p>or use common test account credentials:</p>
-                        <p>Email: free@samuraijs.com</p>
-                        <p>Password: free</p>
                     </FormLabel>
                     <FormGroup>
                         <TextField
@@ -160,12 +174,9 @@ const LoginForm: React.FC<LoginFormPropsType> = ({setLoginWithPassport, handleEm
                         {formik.touched.password && formik.errors.password &&
                         <div style={{color: 'red'}}>{formik.errors.password}</div>}
 
-                        <FormControlLabel
-                            label={'Remember me'}
-                            control={<Checkbox/>}
-                            {...formik.getFieldProps('rememberMe')}
-                        />
-                        <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
+                       
+                        <Button type={'submit'} variant={'contained'} 
+                                color={'primary'} style={{marginTop: 30}}>Login</Button>
                     </FormGroup>
                     <FormLabel>
                       <p style={{marginTop: 30, cursor: 'pointer'}} 
@@ -192,10 +203,8 @@ type LoginFormPropsType = {
 type FormikErrorType = {
     email?: string
     password?: string
-    rememberMe?: boolean
 }
 type FormValuesType = {
     email: string
     password: string
-    rememberMe: boolean
 }
