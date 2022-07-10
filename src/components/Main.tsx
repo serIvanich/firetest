@@ -30,12 +30,15 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
     querySnapshot.forEach((doc) => {
       let { user, text , timestamp} = doc.data({ serverTimestamps: 'estimate' })
       timestamp = timestamp.toDate()
-      timestamp = timestamp.toLocaleTimeString()
+      
+      const date = timestamp.toDateString()
+      const time = timestamp.toLocaleTimeString()
       const dataMessage = {
         id: doc.id,
         userName: user,
         text,
-        timestamp, 
+        time,
+        date,  
       }
       messages.push(dataMessage) 
       
@@ -65,7 +68,7 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
               style={{border: 'solid 1px lightblue', borderRadius: 3,}}
         >
           <Button onClick={enterForPrivat}>
-            ONLY FOR REGISTER USER 
+            Write message ONLY FOR REGISTER USER 
           </Button>
         </Grid>
       </Grid>
@@ -76,7 +79,8 @@ export const Main: React.FC<MainPropsType> = ({onLogin}) => {
 const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessages}) => {
   const {auth, db} = useUserContext()
   const [user] = useAuthState(auth)
-  
+  let currentDate = ''
+  let newDate = false
   const deleteMessage = async(id: string) => {
     
     await deleteDoc(doc(db, 'messages', id));
@@ -91,6 +95,19 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessage
       { 
          messages.map((message) => {
           const userPrivat = user && (user.displayName === message.userName || user.email ===  message.userName)
+
+          
+      
+          if (currentDate !== message.date) {
+            currentDate = message.date
+            newDate = true
+            
+          }else{
+            if(newDate) {
+              newDate = false
+              
+            }
+          }
           const justify = userPrivat?'flex-end':'flex-start'
           return <Grid container 
                     key={message.id}
@@ -98,6 +115,13 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessage
                     direction={'column'}
                     
                   >
+                    {newDate &&  <Grid item 
+                                    style={{width: '50%', alignSelf: 'center',
+                                            margin: '20px 0', textAlign: 'center',
+                                            borderBottom: 'solid 1px', color: 'blue',}}>
+                                    {message.date.slice(4, -4)}
+                                    
+                                  </Grid>}
                     < Grid container 
                       direction={'column'}
                       style={{width: 200, margin: 10,
@@ -135,7 +159,7 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessage
                                     padding:5, fontSize: '0.7em',
                                   }}
                       >
-                        {message.timestamp}
+                        {message.time}
                       </Grid>
                       
 
@@ -160,5 +184,6 @@ type MessageType = {
   id: string
   userName: string
   text: string
-  timestamp: any
+  time: string
+  date: string
 }
