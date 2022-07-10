@@ -118,7 +118,7 @@ const MessagesColumn: React.FC<MessagesColumnPropsType> = ({messages, getMessage
                     {newDate &&  <Grid item 
                                     style={{width: '50%', alignSelf: 'center',
                                             margin: '20px 0', textAlign: 'center',
-                                            borderBottom: 'solid 1px', color: 'blue',}}>
+                                            borderBottom: 'solid 1px blue', color: 'gray',}}>
                                     {message.date.slice(4, -4)}
                                     
                                   </Grid>}
